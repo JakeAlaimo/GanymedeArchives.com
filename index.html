@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ganymede Archives - Keyforge Data and Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Development Version of Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    
+</head>
+<body>
+    <div id="app">
+        <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
+        <input @click="getData" type="button" value="Search"></input>
+
+        <card-details v-bind:name="cardName" v-bind:image="cardImage"></card-details> <!-- Vue component presenting the basic information about a card -->
+    </div>
+
+    
+</body>
+
+<script>
+
+    //fetch(`https://ganymede-archives.herokuapp.com/WakeUp`); //send a message to the backend immediately, just in case the backend is sleeping
+
+    Vue.component('card-details',{
+        props: ['name','image'],
+        template:  `<section>
+                        <h2>{{name}}</h2>
+                        <img v-bind:src='image' />
+                    </section>`
+    });
+
+    
+
+    const app = new Vue({
+        el: '#app',
+        data: {
+            cardName: "",
+            inputText: "",
+            cardImage: ""
+        },
+        created()
+        {
+            //this.search();
+        },
+        methods:{
+
+            getData(){
+                
+                if(this.inputText == "") return;
+
+                fetch(`https://ganymede-archives.herokuapp.com/api/Card/?card_name=${this.inputText}`)
+                .then(function(response) {
+                    return response.text();
+                })
+                .then(function(json) {
+                    json = JSON.parse(json);
+                    console.log(json);
+                    this.cardName = json.card_title;
+                    //this.cardImage = require(json.front_image);
+                    document.querySelector("img").src = json.front_image;
+                });
+            }, // end search
+
+        } // end methods
+
+    });
+    
+</script>
+
+</html>
