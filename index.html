@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,32 +10,103 @@
     <!-- Development Version of Vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
-    
+    <!-- Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
 </head>
+
 <body>
     <div id="app">
         <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
         <input @click="getData" type="button" value="Search"></input>
 
-        <card-details v-bind:name="cardName" v-bind:image="cardImage"></card-details> <!-- Vue component presenting the basic information about a card -->
+        <card-details v-bind:name="cardName" v-bind:image="cardImage"></card-details>
+        <!-- Vue component presenting the basic information about a card -->
     </div>
 
-    
+    <div id="ColumnChart"></div>
 </body>
 
-<script>
+<script type="text/javascript">
+
+    google.charts.load('current', { packages: ['corechart'] });
+    //google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart(house) {
+        // Define the chart to be drawn.
+        let data = new google.visualization.DataTable();
+        data.addColumn('string', 'House');
+        data.addColumn('number', 'Winrate');
+        data.addColumn({ type: 'string', role: 'style' });
+        if (house != "Brobnar") {
+            data.addRows([
+                ['Brobnar', 8.94, '#ef481f']
+            ]);
+        }
+        if (house != "Dis") {
+            data.addRows([
+                ['Dis', 10.49, '#540099']
+            ]);
+        }
+        if (house != "Logos") {
+            data.addRows([
+                ['Logos', 19.30, '#4cedff']
+            ]);
+        }
+        if (house != "Mars") {
+            data.addRows([
+                ['Mars', 21.45, '#70ff4c']
+            ]);
+        }
+        if (house != "Sanctum") {
+            data.addRows([
+                ['Sanctum', 21.45, '#205caa']
+            ]);
+        }
+        if (house != "Shadows") {
+            data.addRows([
+                ['Shadows', 21.45, '#444444']
+            ]);
+        }
+        if (house != "Untamed") {
+            data.addRows([
+                ['Untamed', 21.45, '#26600d']
+            ]);
+        }
+        /*let data = google.visualization.arrayToDataTable([
+            ['Element', 'Density', { role: 'style' }],
+            ['Brobnar', 8.94, '#ef481f'],            
+            ['Dis', 10.49, '#540099'],            
+            ['Logos', 19.30, '#4cedff'],
+            ['Mars', 21.45, '#70ff4c'], 
+            ['Sanctum', 21.45, '#205caa'], 
+            ['Shadows', 21.45, '#444444'], 
+            ['Untamed', 21.45, '#26600d'], 
+        ]);*/
+
+        let options = {
+            width: 400,
+            height: 240,
+        };
+
+        // Instantiate and draw the chart.
+        let chart = new google.visualization.ColumnChart(document.getElementById('ColumnChart'));
+        chart.draw(data, options);
+    }
+
 
     //fetch(`https://ganymede-archives.herokuapp.com/WakeUp`); //send a message to the backend immediately, just in case the backend is sleeping
 
-    Vue.component('card-details',{
-        props: ['name','image'],
-        template:  `<section>
+    Vue.component('card-details', {
+        props: ['name', 'image'],
+        template: `<section>
                         <h2>{{name}}</h2>
                         <img v-bind:src='image' />
                     </section>`
     });
 
-    
+
 
     const app = new Vue({
         el: '#app',
@@ -43,33 +115,33 @@
             inputText: "",
             cardImage: ""
         },
-        created()
-        {
+        created() {
             //this.search();
         },
-        methods:{
+        methods: {
 
-            getData(){
-                
-                if(this.inputText == "") return;
+            getData() {
+
+                if (this.inputText == "") return;
 
                 fetch(`https://ganymede-archives.herokuapp.com/api/Card/?card_name=${this.inputText}`)
-                .then(function(response) {
-                    return response.text();
-                })
-                .then(function(json) {
-                    json = JSON.parse(json);
-                    console.log(json);
-                    this.cardName = json.card_title;
-                    //this.cardImage = require(json.front_image);
-                    document.querySelector("img").src = json.front_image;
-                });
+                    .then(function (response) {
+                        return response.text();
+                    })
+                    .then(function (json) {
+                        json = JSON.parse(json);
+                        console.log(json);
+                        this.cardName = json.card_title;
+                        //this.cardImage = require(json.front_image);
+                        document.querySelector("img").src = json.front_image;
+                        drawChart(json.house);
+                    });
             }, // end search
 
         } // end methods
 
     });
-    
+
 </script>
 
 </html>
