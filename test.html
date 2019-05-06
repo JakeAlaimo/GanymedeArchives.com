@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ganymede Archives - Keyforge Data and Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- Development Version of Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+</head>
+
+<body>
+    <div id="header">
+        <h1 id="name">
+            Ganymede Archives
+        </h1>
+    </div>
+    
+    <div id="app">
+        <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
+        <input @click="getCardData" type="button" value="Search"></input>
+        
+        <card-details v-bind:name="card.data.card_title" v-bind:image="card.data.front_image" v-bind:winratemodifier="card.data.winRateModifier"></card-details>
+        <!-- Vue component presenting the basic information about a card -->
+    </div>
+
+    <div id="ColumnChart"></div>
+</body>
+<script src="js/card.js"></script>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+
+
+</html>
