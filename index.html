@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Ganymede Archives - Keyforge Data and Analytics</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 
     <!-- Development Version of Vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -18,10 +19,18 @@
 
 <body>
     <div id="app">
-        <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
-        <input @click="getCardData" type="button" value="Search"></input>
+        <ul id="header">
+            <li id="title">Ganymede Archives</li>
+            <li id="search">
+                <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
+                <input @click="getCardData" type="button" value="Search"></input>
+            </li>
+            <li class="navbutton">Most Viewed</li>
+            <li class="navbutton">Highest Rated</li>
+        </ul>
 
-        <card-details v-bind:name="card.data.name" v-bind:image="card.data.front_image"></card-details>
+        <card-details v-bind:name="card.data.card_title" v-bind:image="card.data.front_image"
+            v-bind:winratemodifier="card.data.winRateModifier"></card-details>
         <!-- Vue component presenting the basic information about a card -->
     </div>
 
