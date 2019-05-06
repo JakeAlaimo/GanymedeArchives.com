@@ -18,15 +18,16 @@
 </head>
 
 <body>
-    <div id="header">
-        <h1 id="name">
-            Ganymede Archives
-        </h1>
-    </div>
-    
     <div id="app">
-        <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
-        <input @click="getCardData" type="button" value="Search"></input>
+            <ul id="header">
+                    <li id="title">Ganymede Archives</li>
+                    <li id="search">
+                    <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
+                    <input @click="getCardData" type="button" value="Search"></input>
+                    </li>
+                    <li class="navbutton">Most Viewed</li>
+                    <li class="navbutton">Highest Rated</li>
+                </ul>
         
         <card-details v-bind:name="card.data.card_title" v-bind:image="card.data.front_image" v-bind:winratemodifier="card.data.winRateModifier"></card-details>
         <!-- Vue component presenting the basic information about a card -->
