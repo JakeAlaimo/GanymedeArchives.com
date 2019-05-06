@@ -6,3 +6,12 @@ Vue.component('card-details', {
                     <h2 id="winrate">Winrate: {{ winratemodifier }}</h2>
                 </section>`
 });
+
+Vue.component('card-list', {
+    props: ['cards'],
+    template: `<section>
+        <ul>
+            <li v-for="card in cards">{{ card.card_title }}</li>
+        </ul>
+    <section>`
+});
