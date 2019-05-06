@@ -19,127 +19,17 @@
 <body>
     <div id="app">
         <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
-        <input @click="getData" type="button" value="Search"></input>
+        <input @click="getCardData" type="button" value="Search"></input>
 
-        <card-details v-bind:name="cardName" v-bind:image="cardImage"></card-details>
+        <card-details v-bind:name="card.data.name" v-bind:image="card.data.front_image"></card-details>
         <!-- Vue component presenting the basic information about a card -->
     </div>
 
     <div id="ColumnChart"></div>
 </body>
+<script src="js/card.js"></script>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
 
-<script type="text/javascript">
-
-    google.charts.load('current', { packages: ['corechart'] });
-    //google.charts.setOnLoadCallback(drawChart);
-
-    //given card data, draws all relevant charts and graphs
-    function drawVisualizations(data)
-    {
-        drawSynergies(data);
-    }
-
-    function drawSynergies(data) {
-        // Define the chart to be drawn.
-        let table = new google.visualization.DataTable();
-        let house = data.house;
-        table.addColumn('string', 'House');
-        table.addColumn('number', 'Winrate');
-        table.addColumn({ type: 'string', role: 'style' });
-        if (house != "Brobnar") {
-            table.addRows([
-                ['Brobnar', data.synergies.Brobnar, '#ef481f']
-            ]);
-        }
-        if (house != "Dis") {
-            table.addRows([
-                ['Dis', data.synergies.Dis, '#540099']
-            ]);
-        }
-        if (house != "Logos") {
-            table.addRows([
-                ['Logos', data.synergies.Logos, '#4cedff']
-            ]);
-        }
-        if (house != "Mars") {
-            table.addRows([
-                ['Mars', data.synergies.Mars, '#70ff4c']
-            ]);
-        }
-        if (house != "Sanctum") {
-            table.addRows([
-                ['Sanctum', data.synergies.Sanctum, '#205caa']
-            ]);
-        }
-        if (house != "Shadows") {
-            table.addRows([
-                ['Shadows', data.synergies.Shadows, '#444444']
-            ]);
-        }
-        if (house != "Untamed") {
-            table.addRows([
-                ['Untamed', data.synergies.Untamed, '#26600d']
-            ]);
-        }
-
-
-        let options = {
-            width: 400,
-            height: 240,
-        };
-
-        // Instantiate and draw the chart.
-        let chart = new google.visualization.ColumnChart(document.getElementById('ColumnChart'));
-        chart.draw(table, options);
-    }
-
-
-    //fetch(`https://ganymede-archives.herokuapp.com/WakeUp`); //send a message to the backend immediately, just in case the backend is sleeping
-
-    Vue.component('card-details', {
-        props: ['name', 'image'],
-        template: `<section>
-                        <h2>{{name}}</h2>
-                        <img v-bind:src='image' />
-                    </section>`
-    });
-
-
-
-    const app = new Vue({
-        el: '#app',
-        data: {
-            cardName: "",
-            inputText: "",
-            cardImage: ""
-        },
-        created() {
-            //this.search();
-        },
-        methods: {
-
-            getData() {
-
-                if (this.inputText == "") return;
-
-                fetch(`https://ganymede-archives.herokuapp.com/api/Card/?card_name=${this.inputText}`)
-                    .then(function (response) {
-                        return response.text();
-                    })
-                    .then(function (json) {
-                        json = JSON.parse(json);
-                        console.log(json);
-                        this.cardName = json.card_title;
-                        //this.cardImage = require(json.front_image);
-                        document.querySelector("img").src = json.front_image;
-                        drawVisualizations(json);
-                    });
-            }, // end search
-
-        } // end methods
-
-    });
-
-</script>
 
 </html>
