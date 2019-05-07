@@ -28,7 +28,7 @@ body {
     left: 15px;
 }
 
-li {
+#header li {
     display: block;
     float: left;
     padding: 14px 16px;

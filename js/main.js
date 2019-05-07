@@ -208,7 +208,17 @@ function orderData(data, relativeTo)
     for(let key of keysSorted)
     {
         let obj = {};
-        obj[key] = data[key];
+        //obj[key] = data[key];
+        obj.name = key;
+
+        if(app.listState.getCurrentState() == "views"){
+            obj.value = data[key].views;
+            obj.qualifier = "views";
+        }
+        else {
+            obj.value = data[key].average;
+            obj.qualifier = "stars";
+        }
 
         ordered.push(obj);
     }

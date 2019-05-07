@@ -81,7 +81,7 @@ Vue.component('card-list', {
         </select></li>
     </ul>
         <ul v-for="card in list">
-            <li >{{ card }}</li>
+            <li>{{card.name}} - {{card.value}} {{card.qualifier}}</li>
         </ul>
         <input @click="pageChange('down')" type="button" value="Previous Page"></input>
         <input  @click="pageChange('up')"type="button" value="Next Page"></input>
