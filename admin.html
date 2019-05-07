@@ -18,13 +18,13 @@
 
 <body>
     <div id="app">
-        <h3>Average Ratings</h3>
-        <ul>
-            <li v-for="card in ratingData">{{ card.value }}</li>
-        </ul>
         <h3>Total Views</h3>
-        <ul>
-            <li v-for="card in viewData">{{ card.value }}</li>
+        <ul v-for="(value, name) in viewData">
+            <li>{{ name }} : {{ value }}</li>
+        </ul>
+        <h3>User Ratings</h3>
+        <ul v-for="(value, name) in ratingData">
+            <li>{{ name }} : {{ value }}</li>
         </ul>
     </div>
 </body>

@@ -24,12 +24,11 @@ const app = new Vue({
         //retrieve the appropriate list data from firebase
         pullListData()
         {
-            firebase.database().ref("views").once('value', this.processViews);
+            firebase.database().ref("views").on("value", this.processViews);
             
-            firebase.database().ref("ratings").once('value', this.processRatings);
+            firebase.database().ref("ratings").on("value", this.processRatings);
         },
 
-        //pull out the appropriate amount of data from the given firebase snapshot
         processRatings(snapshot)
         {
             let data = snapshot.val();
