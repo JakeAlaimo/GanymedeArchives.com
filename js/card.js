@@ -57,15 +57,18 @@ class Card
             ]);
         }
 
-
         let options = {
-            width: 400,
-            height: 240,
+            width: 600,
+            height: 350,
+            legend: { position: 'none' },
+            vAxis: {
+                minValue: 0.4,
+                maxValue: 0.6
+            }
         };
 
         // Instantiate and draw the chart.
         let chart = new google.visualization.ColumnChart(document.getElementById('ColumnChart'));
         chart.draw(table, options);
     }
-
 }
