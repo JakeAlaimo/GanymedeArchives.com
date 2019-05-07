@@ -60,6 +60,13 @@ class Card
         let options = {
             width: 600,
             height: 350,
+            title: "House Synergies",
+            titleTextStyle: {
+                fontName: 'Segoe UI',
+                fontSize: 20,
+                bold: true,
+                italic: false},
+                  
             legend: { position: 'none' },
             vAxis: {
                 minValue: 0.4,

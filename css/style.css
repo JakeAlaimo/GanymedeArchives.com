@@ -2,15 +2,24 @@
 
 body {
     margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #header, #listoptions {
-    background-color: darkslategray;
+    background-color: #750000;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     border-bottom-style: solid;
+    border-color: black;
+}
+
+#title {
+    font-size: 48;
 }
 
 #name {
@@ -19,22 +28,53 @@ body {
     left: 15px;
 }
 
-#cardname {
-    color: pink;
-}
-
 li {
     display: block;
     float: left;
     padding: 14px 16px;
     text-align: center;
     border-right-style: solid;
+    border-color: black;
 }  
 
 .navbutton:hover {
-    background-color: black;
+    background-color: #950000;
 }
 
 #search {
     padding: 12.3px 16px;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+#carddetails {
+    display: flex;
+    flex-direction: row;
+}
+
+#cardinfo {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.interior {
+    padding: 50px;
+}
+
+#cardname {
+    font-size: 50px;
+    padding-bottom: 0px;
+}
+
+#winrate {
+    padding-top: 0px;
+}
+
+#cardimg {
+    flex-shrink: 0;
 }
