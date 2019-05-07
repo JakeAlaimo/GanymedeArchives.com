@@ -2,7 +2,7 @@
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(function(){ 
     let lastSearched = window.localStorage.getItem("ganymedeLastSearched");
-    app.inputText = (lastSearched) ? lastSearched :"Faygin"; 
+    app.inputText = (lastSearched && lastSearched != "undefined") ? lastSearched :"Faygin"; 
     app.displayCardData(false);
 }); //Draw the user's last searched term on screen after Charts loads
 
@@ -22,10 +22,6 @@ firebase.initializeApp(firebaseConfig);
 
 let database = firebase.database();
 
-//refer to the core firebase roots: cards sorted by views and cards sorted by ratings
-//let views = database.ref('views');
-//let ratings = database.ref('ratings');
-
 
 const app = new Vue({
     el: '#app',
@@ -36,8 +32,7 @@ const app = new Vue({
 
         displayState: new StateHandler(["card", "list"]),
 
-        listState: new StateHandler(["views", "ratings"]),
-        sortedBy: "Ratings",
+        listState: new StateHandler(["ratings", "views"]),
 
         listData: [],
 
@@ -69,6 +64,7 @@ const app = new Vue({
 
                         this.card = new Card(json);
                         this.displayState.setTo("card");
+                        this.listOffset = 0;
 
                         if(incrementViews)
                         {
@@ -77,9 +73,9 @@ const app = new Vue({
                                 return (currentViews || 0) + 1; //add one to the current view count
                             });
                         }
-    
-                        //document.querySelector("img").src = json.front_image;
+                        
                         this.card.drawVisualizations();
+                        
                     }
                     
                 }.bind(this));
@@ -110,24 +106,31 @@ const app = new Vue({
                         average: avg
                     }
                 );
-
               });
 
             window.localStorage.setItem("ganymedeRating" + cardName, newRating); //recording the rating given by this computer
         }, // end setRating
 
         //sets up the appropriate app states to show the specified list
-        displayList(list) {
+        displayList() {
 
             this.displayState.setTo("list");
 
-            this.listState.setTo(list); //either views or rating, depending on which button the player clicks
-
-            this.offset = 0; //reset to the first page of information
-
-            this.pullListData();
+            this.pullListData(true);
             
         }, // end displayList
+
+        filterChanged(resetPage, newValue)
+        {
+            this.listState.setTo(newValue);
+            this.pullListData(resetPage);
+        },
+
+        numberFilterChanged(newNum)
+        {
+            this.listLength = newNum;
+            this.pullListData(true);
+        },
 
         //retrieve the appropriate list data from firebase
         pullListData(resetPage)
@@ -155,9 +158,41 @@ const app = new Vue({
 
             //order the retrieved data
             let orderedData = orderData(data, (this.listState.getCurrentState() == "views") ? "views": "average");
+            
+            if(this.listOffset + this.listLength > orderedData.length)//the requested page is outside the bounds of the array
+            {
+                let pages = Math.floor(orderedData.length / this.listLength);
+
+                this.listOffset = pages * this.listLength;
+            }
 
             this.listData = orderedData.slice(this.listOffset, this.listOffset+this.listLength);
+        },
+
+        //shifts the list page offset 
+        changePage(direction)
+        {
+            if(direction == "up")
+                this.listOffset += this.listLength;
+            else
+            {
+                this.listOffset -= this.listLength;
+
+                if(this.listOffset < 0)
+                    this.listOffset = 0;
+            }
+
+            this.pullListData(false);
+        },
+
+        //tell the card class to draw all of the appropriate data visualizations to the screen
+        //this function is triggered by a view event that waits for all of the screen elements to be drawn to the screen
+        drawCharts()
+        {
+            if(this.card.data.card_title)
+                this.card.drawVisualizations();
         }
+
 
     } // end methods
 

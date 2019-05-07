@@ -75,7 +75,11 @@ class Card
         };
 
         // Instantiate and draw the chart.
-        let chart = new google.visualization.ColumnChart(document.getElementById('ColumnChart'));
-        chart.draw(table, options);
+        if(document.getElementById('ColumnChart'))
+        {
+            let chart = new google.visualization.ColumnChart(document.getElementById('ColumnChart'));
+            chart.draw(table, options);
+        }
+
     }
 }
