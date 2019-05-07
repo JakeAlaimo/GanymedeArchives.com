@@ -37,6 +37,7 @@ const app = new Vue({
         displayState: new StateHandler(["card", "list"]),
 
         listState: new StateHandler(["views", "ratings"]),
+        sortedBy: "Ratings",
 
         listData: [],
 

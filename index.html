@@ -27,13 +27,14 @@
                 <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
                 <input @click="displayCardData(true)" type="button" value="Search"></input>
             </li>
-            <li class="navbutton">Most Viewed</li>
-            <li class="navbutton">Highest Rated</li>
+            <li class="navbutton" @click="displayList(views)">Most Viewed</li>
+            <li class="navbutton" @click="displayList(ratings)" >Highest Rated</li>
         </ul>
 
         <card-details v-if="displayState.states.card" v-bind:name="card.data.card_title" v-bind:image="card.data.front_image"
             v-bind:winratemodifier="card.data.winRateModifier"></card-details>
 
+        <card-list v-if="displayState.states.list" v-bind:list="listData" v-bind:sortBy="sortedBy"></card-list>
         <!-- Vue component presenting the basic information about a card -->
     </div>
 
