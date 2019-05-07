@@ -14,6 +14,8 @@
     <!-- Google Charts -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 </head>
 
@@ -23,20 +25,33 @@
             <li id="title">Ganymede Archives</li>
             <li id="search">
                 <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
-                <input @click="getCardData" type="button" value="Search"></input>
+                <input @click="displayCardData(true)" type="button" value="Search"></input>
             </li>
             <li class="navbutton">Most Viewed</li>
             <li class="navbutton">Highest Rated</li>
         </ul>
 
-        <card-details v-bind:name="card.data.card_title" v-bind:image="card.data.front_image"
+        <card-details v-if="displayState.states.card" v-bind:name="card.data.card_title" v-bind:image="card.data.front_image"
             v-bind:winratemodifier="card.data.winRateModifier"></card-details>
+
         <!-- Vue component presenting the basic information about a card -->
     </div>
 
     <div id="ColumnChart"></div>
 </body>
+
+<!-- Prepare Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/5.11.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.11.1/firebase-database.js"></script>
+
+<script>
+  
+</script>
+
+<!-- load all other files -->
 <script src="js/card.js"></script>
+<script src="js/StateHandler.js"></script>
 <script src="js/components.js"></script>
 <script src="js/main.js"></script>
 
