@@ -1,50 +1,55 @@
-//prepare the Google Charts API
-google.charts.load('current', { packages: ['corechart'] });
-google.charts.setOnLoadCallback(function(){ 
-    let lastSearched = localStorage.getItem("ganymedeLastSearched");
-    app.inputText = (!lastSearched) ? lastSearched :"Faygin"; 
-    app.getCardData();
+//prepare Firebase access
 
-}); //Draw the user's last searched term on screen after Charts loads
+var firebaseConfig = {
+    apiKey: "AIzaSyAJejQ8F3twbtxLh9SJQMy6ZtGRbRMiWcw",
+    authDomain: "ganymede-archives.firebaseapp.com",
+    databaseURL: "https://ganymede-archives.firebaseio.com",
+    projectId: "ganymede-archives",
+    storageBucket: "ganymede-archives.appspot.com",
+    messagingSenderId: "253585434984",
+    appId: "1:253585434984:web:23a8713ebcbb975b"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
+let database = firebase.database();
 
 const app = new Vue({
     el: '#app',
     data: {
-        inputText: "",
-        cards: {data:{name: "", front_image: ""}}
+        ratingData: [],
+        viewData: []
     },
     created() {
+        
     },
     methods: {
+        //retrieve the appropriate list data from firebase
+        pullListData(resetPage)
+        {
+            firebase.database().ref("views").once('value', this.processViews);
+            
+            firebase.database().ref("ratings").once('value', this.processRatings);
+        },
 
-        getCardData() {
+        //pull out the appropriate amount of data from the given firebase snapshot
+        processRatings(snapshot)
+        {
+            let data = snapshot.val();
 
-            if (this.inputText == "") return;
-            //this.inputText = "Faygin";
-            //TODO validate input here
+            if(data == null) return; //no data to list out
 
-            fetch(`https://ganymede-archives.herokuapp.com/api/Card/?card_name=${this.inputText}`)
-                .then(function (response) {
-                    return response.text();
-                })
-                .then(function (json) {
-                    json = JSON.parse(json);
-                    console.log(json);
+            this.ratingData = data;
+        },
 
-                    if(json.error == undefined)
-                    {
-                        localStorage.setItem("ganymedeLastSearched", this.inputText);
+        processViews(snapshot)
+        {
+            let data = snapshot.val();
 
-                        app.card = new Card(json);
-                        
-    
-                        //document.querySelector("img").src = json.front_image;
-                        app.card.drawVisualizations();
-                    }
-                    
-                });
-        }, // end search
+            if(data == null) return; //no data to list out
+
+            this.viewData = data;
+        }
 
     } // end methods
 

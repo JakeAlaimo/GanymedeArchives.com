@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Ganymede Archives - Admin Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
 
     <!-- Development Version of Vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -19,8 +18,13 @@
 
 <body>
     <div id="app">
+        <h3>Average Ratings</h3>
         <ul>
-            <li v-for="card in cards"></li>
+            <li v-for="card in ratingData">{{ card.data.name }} : {{ card.data.value }}</li>
+        </ul>
+        <h3>Total Views</h3>
+        <ul>
+            <li v-for="card in viewData">{{ card.data.name }} : {{ card.data.value }}</li>
         </ul>
     </div>
 </body>
