@@ -38,16 +38,18 @@ const app = new Vue({
 
         listState: new StateHandler(["views", "ratings"]),
 
+        listData: [],
+
         listLength: 25,
         listOffset: 0, //for presenting pages of information
     },
     created() {
+        
     },
     methods: {
 
         //take the input placed in the search bar and retrieve and display the appropriate card info
         displayCardData(incrementViews) {
-
             if (this.inputText == "") return;
             
             //TODO validate input here
@@ -71,8 +73,7 @@ const app = new Vue({
                         {
                             //increment the firebase view count for this card
                             firebase.database().ref("views/" + this.card.data.card_title + "/views").transaction(function(currentViews) {
-                                // If node/clicks has never been set, currentRank will be `null`.
-                                return (currentViews || 0) + 1;
+                                return (currentViews || 0) + 1; //add one to the current view count
                             });
                         }
     
@@ -82,6 +83,37 @@ const app = new Vue({
                     
                 }.bind(this));
         }, // end displayCardData
+
+        //allows the user to rate individual cards
+        setRating(newRating) {
+            let cardName = this.card.data.card_title;
+            let prevRating = window.localStorage.getItem("ganymedeRating" + cardName);
+
+            //read the data in from firebase, then edit it
+            firebase.database().ref("ratings/" + cardName).once('value').then(function(snapshot) { 
+                let data = snapshot.val();
+
+                if(data == null) data = {}; // .val() will return null if there is no child. 
+
+                let newCount = (prevRating) ? (data.ratingCount || 0) : (data.ratingCount || 0) + 1;
+
+                prevRating = (prevRating) ? prevRating : 0; 
+
+                let total = ((data.total || 0) - prevRating) + newRating;
+                let avg = total / newCount;
+
+                firebase.database().ref("ratings/" + cardName).set(
+                    {
+                        ratingCount: newCount,
+                        total: total,
+                        average: avg
+                    }
+                );
+
+              });
+
+            window.localStorage.setItem("ganymedeRating" + cardName, newRating); //recording the rating given by this computer
+        }, // end setRating
 
         //sets up the appropriate app states to show the specified list
         displayList(list) {
@@ -97,11 +129,54 @@ const app = new Vue({
         }, // end displayList
 
         //retrieve the appropriate list data from firebase
-        pullListData()
+        pullListData(resetPage)
         {
+            if(resetPage)
+                this.offset = 0;
 
+            
+            if(this.listState.getCurrentState() == "views")
+            {
+                firebase.database().ref("views").once('value', this.processSnapshot);
+            }
+            else
+            {
+                firebase.database().ref("ratings").once('value', this.processSnapshot);
+            }
+        },
+
+        //pull out the appropriate amount of data from the given firebase snapshot
+        processSnapshot(snapshot)
+        {
+            let data = snapshot.val();
+
+            if(data == null) return; //no data to list out
+
+            //order the retrieved data
+            let orderedData = orderData(data, (this.listState.getCurrentState() == "views") ? "views": "average");
+
+            this.listData = orderedData.slice(this.listOffset, this.listOffset+this.listLength);
         }
 
     } // end methods
 
 });
+
+//order the elements in a javascript object by the value at a given key
+function orderData(data, relativeTo)
+{
+    let ordered = [];
+    console.log(data[relativeTo]);
+    keysSorted = Object.keys(data).sort(function(a,b){return data[b][relativeTo] - data[a][relativeTo]});
+
+    for(let key of keysSorted)
+    {
+        let obj = {};
+        obj[key] = data[key];
+
+        ordered.push(obj);
+    }
+
+    return ordered;
+
+}

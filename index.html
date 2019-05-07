@@ -13,15 +13,17 @@
     <!-- Google Charts -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 </head>
 
 <body>
     <div id="app">
         <input v-model="inputText" type="text" placeholder="Search for cards here"></input>
-        <input @click="displayCardData" type="button" value="Search"></input>
+        <input @click="displayCardData(true)" type="button" value="Search"></input>
 
-        <card-details v-if="displayState.card" v-bind:name="card.data.card_title" v-bind:image="card.data.front_image"></card-details>
+        <card-details v-if="displayState.states.card" v-bind:winratemodifier="card.data.winRateModifier" v-bind:name="card.data.card_title" v-bind:image="card.data.front_image"></card-details>
         <!-- Vue component presenting the basic information about a card -->
     </div>
 
