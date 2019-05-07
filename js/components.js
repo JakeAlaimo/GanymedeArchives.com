@@ -1,9 +1,14 @@
 Vue.component('card-details', {
     props: ['name', 'image', 'winratemodifier'],
-    template: `<section>                  
-                    <img v-bind:src="image" id="cardimg"/>
-                    <h2 id="cardname">{{ name }}</h2>
-                    <h2 id="winrate">Winrate: {{ winratemodifier }}</h2>
+    template: `<section id="content">                  
+                    <div id="carddetails">        
+                        <img v-bind:src="image" id="cardimg" class="interior"/>
+                        <div id="cardinfo">
+                            <h2 id="cardname" class="interior">{{ name }}</h2>
+                            <h2 id="winrate" class="interior">Winrate Modifier: {{ winratemodifier }}</h2>
+                        </div>
+                    </div>
+                    <div id="ColumnChart"></div>
                 </section>`
 });
 
