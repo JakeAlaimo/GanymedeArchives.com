@@ -20,19 +20,15 @@ const app = new Vue({
         ratingData: [],
         viewData: []
     },
-    created() {
-        
-    },
     methods: {
         //retrieve the appropriate list data from firebase
-        pullListData(resetPage)
+        pullListData()
         {
-            firebase.database().ref("views").once('value', this.processViews);
+            firebase.database().ref("views").on("value", this.processViews);
             
-            firebase.database().ref("ratings").once('value', this.processRatings);
+            firebase.database().ref("ratings").on("value", this.processRatings);
         },
 
-        //pull out the appropriate amount of data from the given firebase snapshot
         processRatings(snapshot)
         {
             let data = snapshot.val();
@@ -51,6 +47,9 @@ const app = new Vue({
             this.viewData = data;
         }
 
-    } // end methods
+    }, // end methods
+    created() {
+        this.pullListData();
+    } 
 
 });

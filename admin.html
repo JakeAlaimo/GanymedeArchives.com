@@ -18,16 +18,20 @@
 
 <body>
     <div id="app">
-        <h3>Average Ratings</h3>
-        <ul>
-            <li v-for="card in ratingData">{{ card.data.name }} : {{ card.data.value }}</li>
-        </ul>
         <h3>Total Views</h3>
-        <ul>
-            <li v-for="card in viewData">{{ card.data.name }} : {{ card.data.value }}</li>
+        <ul v-for="(value, name) in viewData">
+            <li>{{ name }} : {{ value }}</li>
+        </ul>
+        <h3>User Ratings</h3>
+        <ul v-for="(value, name) in ratingData">
+            <li>{{ name }} : {{ value }}</li>
         </ul>
     </div>
 </body>
+
+<script src="https://www.gstatic.com/firebasejs/5.11.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.11.1/firebase-database.js"></script>
+
 <script src="js/card.js"></script>
 <script src="js/components.js"></script>
 <script src="js/admin.js"></script>
